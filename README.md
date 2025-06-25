@@ -61,4 +61,32 @@ A modern, responsive portfolio website showcasing my skills, projects, and exper
 
 ## License
 
-This project is open source and available under the [MIT License](LICENSE). 
+This project is open source and available under the [MIT License](LICENSE).
+
+## Contact Form Setup
+
+There are two options for handling the contact form submissions:
+
+### Option 1: PHP Backend (Recommended if you have a PHP server)
+
+The default implementation uses a PHP script (`sendmail.php`) to handle form submissions. This requires a server with PHP support.
+
+1. Make sure your server supports PHP
+2. Upload all files to your server
+3. The contact form will automatically send emails to sahani.amit502@gmail.com when submitted
+
+### Option 2: Formspree (No server required)
+
+If you don't have a PHP server, you can use Formspree:
+
+1. In index.html, replace the script.js reference with contact-formspree.js:
+   ```html
+   <!-- Replace this line -->
+   <script src="script.js"></script>
+   
+   <!-- With this line -->
+   <script src="contact-formspree.js"></script>
+   ```
+2. Create a free account at [Formspree](https://formspree.io/)
+3. Verify your email address
+4. Update the form action in contact-formspree.js with your Formspree endpoint 

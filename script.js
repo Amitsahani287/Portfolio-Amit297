@@ -72,12 +72,48 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
             
-            // Here you would typically send the form data to a server
-            // For demo purposes, we'll just show an alert
-            alert(`Thank you for your message, ${name}! I will get back to you soon.`);
+            // Show loading state
+            const submitButton = contactForm.querySelector('button[type="submit"]');
+            const originalButtonText = submitButton.textContent;
+            submitButton.disabled = true;
+            submitButton.textContent = 'Sending...';
             
-            // Reset form
-            contactForm.reset();
+            // Prepare data for sending
+            const formData = {
+                name: name,
+                email: email,
+                message: message
+            };
+            
+            // Send data to PHP backend
+            fetch('sendmail.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Success message
+                    alert(`Thank you for your message, ${name}! Your message has been sent.`);
+                    
+                    // Reset form
+                    contactForm.reset();
+                } else {
+                    throw new Error(data.error || 'Failed to send message');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Sorry, there was an error sending your message. Please try again later.');
+            })
+            .finally(() => {
+                // Reset button state
+                submitButton.disabled = false;
+                submitButton.textContent = originalButtonText;
+            });
         });
     }
     
