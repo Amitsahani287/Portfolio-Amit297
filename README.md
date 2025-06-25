@@ -23,7 +23,12 @@ A modern, responsive portfolio website showcasing my skills, projects, and exper
 
 ## Screenshots
 
-![Portfolio Screenshot](./pixelcut-export.png)
+![About Me Screenshot](./about%20me.png)
+![Skills Screenshot](./skill.png)
+![Projects Screenshot](./projects.png)
+![Certification Screenshot](./cert1.png)
+![Resume Screenshot](./resume.png)
+![Contact Screenshot](./contact.png)
 
 ## Sections
 
