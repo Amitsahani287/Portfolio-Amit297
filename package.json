@@ -1,0 +1,14 @@
+{
+  "name": "amit-kumar-portfolio",
+  "version": "1.0.0",
+  "description": "Amit Kumar's Portfolio Website",
+  "main": "index.js",
+  "scripts": {
+    "start": "lite-server"
+  },
+  "author": "Amit Kumar",
+  "license": "MIT",
+  "devDependencies": {
+    "lite-server": "^2.6.1"
+  }
+} 
