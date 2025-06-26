@@ -58,8 +58,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const contactForm = document.getElementById('contactForm');
     
     if (contactForm) {
+        // Initialize EmailJS - no need for init if we use the public key directly in send()
+        
         contactForm.addEventListener('submit', (e) => {
             e.preventDefault();
+            
+            // Show loading state
+            const submitBtn = contactForm.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.textContent;
+            submitBtn.textContent = 'Sending...';
+            submitBtn.disabled = true;
             
             // Get form values
             const name = document.getElementById('name').value;
@@ -69,50 +77,51 @@ document.addEventListener('DOMContentLoaded', () => {
             // Basic form validation
             if (name.trim() === '' || email.trim() === '' || message.trim() === '') {
                 alert('Please fill in all fields');
+                submitBtn.textContent = originalBtnText;
+                submitBtn.disabled = false;
                 return;
             }
             
-            // Show loading state
-            const submitButton = contactForm.querySelector('button[type="submit"]');
-            const originalButtonText = submitButton.textContent;
-            submitButton.disabled = true;
-            submitButton.textContent = 'Sending...';
+            // Use Email.js directly with fetch API
+            const serviceID = 'default_service'; // Replace with your service ID
+            const templateID = 'template_id';    // Replace with your template ID
+            const publicKey = 'YOUR_PUBLIC_KEY'; // Replace with your public key
             
-            // Prepare data for sending
-            const formData = {
-                name: name,
-                email: email,
-                message: message
+            const data = {
+                service_id: serviceID,
+                template_id: templateID,
+                user_id: publicKey,
+                template_params: {
+                    from_name: name,
+                    from_email: email,
+                    to_email: 'sahani.amit502@gmail.com',
+                    message: message
+                }
             };
             
-            // Send data to PHP backend
-            fetch('sendmail.php', {
+            fetch('https://api.emailjs.com/api/v1.0/email/send', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(data),
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Success message
-                    alert(`Thank you for your message, ${name}! Your message has been sent.`);
-                    
-                    // Reset form
+            .then((response) => {
+                if (response.ok) {
+                    alert(`Thank you for your message, ${name}! I will get back to you soon.`);
                     contactForm.reset();
                 } else {
-                    throw new Error(data.error || 'Failed to send message');
+                    throw new Error('Failed to send email');
                 }
             })
-            .catch(error => {
+            .catch((error) => {
                 console.error('Error:', error);
-                alert('Sorry, there was an error sending your message. Please try again later.');
+                alert('Oops! There was an error sending your message. Please try again later.');
             })
             .finally(() => {
                 // Reset button state
-                submitButton.disabled = false;
-                submitButton.textContent = originalButtonText;
+                submitBtn.textContent = originalBtnText;
+                submitBtn.disabled = false;
             });
         });
     }
